@@ -1,0 +1,171 @@
+{
+  "submission": "stack_leaky.c",
+  "problem": "dynamic_stack",
+  "rules_hash": "sha256:8b23669a0bfcbcf8bac3b4277de00f3549e3c9736ee2a6e559114443a132ecfb",
+  "grade": 78.7,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "tests_passed": 8,
+        "tests_total": 8,
+        "failing": []
+      },
+      "feedback": "All 8 tests pass cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "score": 0.65,
+      "weight": 0.25,
+      "contribution": 16.2,
+      "evidence": {
+        "sanitizer_flags": "-fsanitize=address,undefined",
+        "diagnostics": [
+          "Potential memory leak: 1 allocation call(s) but only 0 free() call(s)."
+        ],
+        "allocations": 1,
+        "deallocations": 0
+      },
+      "feedback": "Potential memory leak: 1 allocation call(s) but only 0 free() call(s).",
+      "suggestions": [
+        "Ensure every dynamically allocated block (malloc/calloc) is freed with free().",
+        "Run with -fsanitize=address to intercept memory errors during debugging."
+      ]
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 0.3,
+      "weight": 0.15,
+      "contribution": 4.5,
+      "evidence": {
+        "functions_defined": 1,
+        "expected_min": 3,
+        "function_names": [
+          "main"
+        ]
+      },
+      "feedback": "only main(); no helper",
+      "suggestions": [
+        "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main."
+      ]
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.8,
+      "weight": 0.1,
+      "contribution": 8.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 8,
+        "max_function_length": 36,
+        "total_loc": 36,
+        "functions": [
+          {
+            "name": "main",
+            "cyclomatic_complexity": 8,
+            "length": 30,
+            "nloc": 26
+          }
+        ]
+      },
+      "feedback": "single-block code",
+      "suggestions": [
+        "Break logic into distinct visual sections and functions rather than a single monolithic block."
+      ]
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 3,
+        "failures": [],
+        "overflow_handled": true
+      },
+      "feedback": "All boundary edge cases (zeros, negatives, extreme values) passed cleanly.",
+      "suggestions": []
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Ensure every dynamically allocated block (malloc/calloc) is freed with free().",
+    "Run with -fsanitize=address to intercept memory errors during debugging.",
+    "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.",
+    "Break logic into distinct visual sections and functions rather than a single monolithic block."
+  ],
+  "deductions": [
+    "[MEMORY_SAFETY] -8.8 pts: Memory safety violation: Potential memory leak: 1 allocation call(s) but only 0 free() call(s)..",
+    "[MODULARITY] -10.5 pts: Only main() defined; expected at least 3 functions (core logic should be in a helper function).",
+    "[STRUCTURE] -2.0 pts: Structural deficiencies: single-block code."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Systems Programming & Embedded OS Kernel Call Stacks",
+        "example": "In mission-critical firmware, dynamic stack structures must strictly free every popped node to prevent kernel heap exhaustion.",
+        "benefit": "Intercepts memory leaks and pointer corruption before software is flashed to hardware."
+      },
+      {
+        "use_case": "Automated Pointer Safety & Stack Underflow Triage",
+        "example": "When an empty stack receives POP or PEEK, the agent ensures the program safely outputs 'UNDERFLOW' without null pointer dereference crashes.",
+        "benefit": "Eliminates segmentation faults (0xC0000005) in student lab submissions."
+      },
+      {
+        "use_case": "Modular Object-Oriented Architecture Verification in C",
+        "example": "Enforces separation of concerns across push(), pop(), and free_stack() helper functions rather than monolithic main() implementations.",
+        "benefit": "Instills industrial software design patterns in undergraduate engineers."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Short-Lived Execution Masking Heap Fragmentation",
+        "example": "A student's stack program exits after 10 operations without triggering OS heap fragmentation that only manifests after millions of allocations.",
+        "mitigation": "Execute fuzzing stress tests with 100,000+ random interleaved push/pop operations under ASan instrumentation."
+      },
+      {
+        "limitation": "Compiler Inlining of Small Allocators",
+        "example": "GCC at -O3 may inline small node structs or optimize them into stack frames, potentially bypassing certain static heap checks.",
+        "mitigation": "Evaluate submissions under both -O0 (raw pointer inspection) and -O2 (optimized safety)."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

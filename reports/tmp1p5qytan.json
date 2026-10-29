@@ -1,0 +1,310 @@
+{
+  "submission": "tmp1p5qytan.c",
+  "rules_hash": "sha256:efc562636cc0796d3267631cd9226cbf6428a711920773d8917362d3cb594552",
+  "grade": 45.5,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 0.0,
+      "weight": 0.25,
+      "contribution": 0.0,
+      "evidence": {
+        "tests_passed": 0,
+        "tests_total": 10,
+        "failing": [
+          {
+            "test_name": "test_01",
+            "input": "racecar",
+            "expected": "YES",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_02",
+            "input": "hello",
+            "expected": "NO",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_03",
+            "input": "a",
+            "expected": "YES",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_04",
+            "input": "noon",
+            "expected": "YES",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_05",
+            "input": "step on no pets",
+            "expected": "YES",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_06",
+            "input": "abccba",
+            "expected": "YES",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_07",
+            "input": "abcdefg",
+            "expected": "NO",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_08",
+            "input": "madam",
+            "expected": "YES",
+            "got": "",
+            "note": "runtime error: Process terminated abnormally with exit code 1"
+          },
+          {
+            "test_name": "test_09",
+            "input": "1234321",
+            "expected": "YES",
+            "got": "",
+            "note": "Time Limit Exceeded"
+          },
+          {
+            "test_name": "test_10",
+            "input": "1234567",
+            "expected": "NO",
+            "got": "",
+            "note": "Time Limit Exceeded"
+          }
+        ]
+      },
+      "feedback": "0/10 tests pass. Fails on INT_MAX + 1: signed overflow.",
+      "suggestions": [
+        "Program exited without producing any output or encountered an abnormal runtime termination (e.g. segfault / out of bounds)."
+      ]
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.6,
+      "weight": 0.1,
+      "contribution": 6.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 5,
+        "max_function_length": 41,
+        "total_loc": 30,
+        "functions": [
+          {
+            "name": "isPalindrome",
+            "cyclomatic_complexity": 3,
+            "length": 25,
+            "nloc": 12
+          },
+          {
+            "name": "main",
+            "cyclomatic_complexity": 5,
+            "length": 41,
+            "nloc": 16
+          }
+        ]
+      },
+      "feedback": "no documentation headers, function length 41 > 35",
+      "suggestions": []
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 0.3,
+      "weight": 0.15,
+      "contribution": 4.5,
+      "evidence": {
+        "functions_defined": 1,
+        "expected_min": 2,
+        "function_names": [
+          "main"
+        ]
+      },
+      "feedback": "only main(); no helper",
+      "suggestions": [
+        "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main."
+      ]
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 0.0,
+      "weight": 0.15,
+      "contribution": 0.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 4,
+        "failures": [
+          {
+            "case": "single character palindrome",
+            "input": "a",
+            "expected": "YES",
+            "got": "",
+            "note": "Incorrect result for single character palindrome"
+          },
+          {
+            "case": "even length palindrome",
+            "input": "noon",
+            "expected": "YES",
+            "got": "",
+            "note": "Incorrect result for even length palindrome"
+          },
+          {
+            "case": "phrase with spaces",
+            "input": "step on no pets",
+            "expected": "YES",
+            "got": "",
+            "note": "Incorrect result for phrase with spaces"
+          },
+          {
+            "case": "standard non-palindrome",
+            "input": "xyz",
+            "expected": "NO",
+            "got": "",
+            "note": "Incorrect result for standard non-palindrome"
+          }
+        ],
+        "overflow_handled": true
+      },
+      "feedback": "Failed 4 edge cases: single character palindrome",
+      "suggestions": [
+        "Review boundary handling for: single character palindrome"
+      ]
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "required_complexity": "O(N)",
+        "detected_loops": 2,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 81.533
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 90.999
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 81.6
+          }
+        ],
+        "asymptotic_match": true
+      },
+      "feedback": "O(N) confirmed",
+      "suggestions": []
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "sanitizer_flags": "-fsanitize=address,undefined",
+        "diagnostics": [],
+        "allocations": 0,
+        "deallocations": 0
+      },
+      "feedback": "no diagnostics",
+      "suggestions": []
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Program exited without producing any output or encountered an abnormal runtime termination (e.g. segfault / out of bounds).",
+    "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.",
+    "Review boundary handling for: single character palindrome"
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Coding-interview and hiring screens",
+        "example": "A company runs 500 candidate submissions for an 'add two integers safely' task. The agent ranks them by correctness, edge-case handling and memory safety, and gives an explainable per-metric score.",
+        "benefit": "Fast first-round filtering where every rejection can be justified metric by metric."
+      },
+      {
+        "use_case": "Plagiarism and LLM-copy triage for instructors",
+        "example": "Two submissions reach a similarity of 0.93 against the 0.85 threshold, so the agent raises a flag in the report. The instructor reviews only those pairs instead of all 300.",
+        "benefit": "Saves review time by narrowing manual checking to suspicious cases."
+      },
+      {
+        "use_case": "Continuous feedback in large-enrollment university CS labs",
+        "example": "400 students submitting weekly lab assignments get instant, reproducible feedback at 2 AM without waiting days for TA grading.",
+        "benefit": "Accelerates student learning cycle and unburdens teaching assistants."
+      },
+      {
+        "use_case": "CI/CD regression gating for mission-critical C software",
+        "example": "Pull requests must achieve 100/100 across correctness, sanitizers, and complexity bounds before merging into embedded systems firmware.",
+        "benefit": "Intercepts memory leaks and algorithmic latency regressions before production deployment."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Tests cannot prove correctness",
+        "example": "A submission passes all 10 hidden tests but fails when the input has extra whitespace or a trailing newline that no test covers. The agent still reports 10/10.",
+        "mitigation": "The agent should create its own extra tricky test inputs and compare the student's answers with the answers of a correct program."
+      },
+      {
+        "limitation": "Wall-clock timing curves are noisy on shared or virtualized machines",
+        "example": "A student's O(1) submission runs in 2ms on one execution, but during background OS scheduling spikes to 28ms, distorting empirical complexity estimation.",
+        "mitigation": "Normalize timings against a simultaneous baseline kernel or measure hardware instruction counts / CPU cycles instead of raw wall-clock time."
+      },
+      {
+        "limitation": "Surface similarity can be deceived by structural refactoring and obfuscation",
+        "example": "A student copies code from a peer but reorders independent statements, inserts dead variables, or wraps expressions in macros, dropping lexical n-gram similarity below 0.85.",
+        "mitigation": "Synthesize control-flow graphs (CFG) and compare normalized intermediate representations (LLVM IR / AST) rather than token text."
+      },
+      {
+        "limitation": "Compiler optimizations may mask undefined behavior or dead loops",
+        "example": "An uninitialized variable or dead infinite loop is eliminated by GCC at -O2 optimization level, allowing a flawed submission to pass smoke tests.",
+        "mitigation": "Compile and test across multiple optimization tiers (-O0, -O2, -Og) with ASan/UBSan instrumentation."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

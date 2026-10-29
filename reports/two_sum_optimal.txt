@@ -1,0 +1,42 @@
+===== Grading report for two_sum_optimal.c =====
+Problem: two_sum_sorted
+Overall grade: 95.0 / 100
+Metric         Weight Score  Contribution Verdict
+correctness    25     25/25  25.0         All 10 tests pass cleanly.
+complexity     25     25/25  25.0         O(N) confirmed
+syntax         10     10/10  10.0         Clean compilation with zero warnings.
+structure      10     8/10   8.0          function length 59 > 40
+modularity     10     10/10  10.0         2 functions defined (modular helper architecture verified)
+logical        10     10/10  10.0         All boundary edge cases (zeros, negatives, extreme values) passed cleanly.
+readability    10     7/10   7.0          Single-letter names, missing whitespace.
+
+--- Why Your Grade Decreased (Deduction Analysis) ---
+- [STRUCTURE] -2.0 pts: Structural deficiencies: function length 59 > 40.
+- [READABILITY] -3.0 pts: Readability/style deficiencies: Single-letter names, missing whitespace..
+
+--- Suggestions to raise the grade ---
+- Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).
+- Add spaces around arithmetic operators and blank lines between logical sections.
+
+—-- Usefulness & limitations for two_sum_sorted —--
+Useful for:
+1. Algorithmic Efficiency Screening in Quantitative & Tech Interviews
+Example: Evaluates whether candidates discover the O(N) two-pointer technique on sorted arrays versus naive O(N^2) brute-force nested loops across 10,000+ elements.
+Benefit: Automates algorithmic performance gating without subjective manual code reviews.
+
+2. Special Judge Multi-Solution Verification
+Example: When an array contains multiple valid index pairs (e.g. arr[1]+arr[4]=70 and arr[2]+arr[3]=70), the agent accepts any mathematically valid pair.
+Benefit: Eliminates false negatives common in rigid exact-match string diff graders.
+
+3. Memory Bounds & Linear Array Traversal Gating
+Example: Verifies that array indexing does not produce off-by-one errors or out-of-bounds access on negative target numbers.
+Benefit: Guarantees runtime index safety prior to production algorithm deployment.
+
+Limits of this report (two_sum_sorted):
+1. Multi-solution Non-determinism with Rigid Checkers
+Example: If a student outputs a different valid index pair than the single reference output, strict line-by-line diffs fail unless a Special Judge is active.
+Mitigation: AutoGrader includes an integrated two_sum validator that verifies arr[i] + arr[j] == target dynamically.
+
+2. CPU L1/L2 Cache Locality Skewing Timing Curves
+Example: An O(N) linear scan on a small array fits entirely in CPU cache, showing sub-microsecond runtimes that distort empirical curve fitting.
+Mitigation: Profile hardware instruction retirement counts and CPU cycles rather than raw wall-clock duration.

@@ -1,0 +1,357 @@
+{
+  "submission": "add_plagiarized.c",
+  "problem": "add_two_integers_peer_review",
+  "rules_hash": "sha256:f9a72e809b005ad9f655a04c1a2b25202361e39150bab5ed7bcb904cea119245",
+  "grade": 69.0,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 0.9,
+      "weight": 0.2,
+      "contribution": 18.0,
+      "evidence": {
+        "tests_passed": 8,
+        "tests_total": 10,
+        "failing": [
+          {
+            "test_name": "test_07",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "-2147483648",
+            "note": "runtime error: signed integer overflow"
+          },
+          {
+            "test_name": "test_08",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "2147483647",
+            "note": "runtime error: signed integer overflow"
+          }
+        ]
+      },
+      "feedback": "8/10 tests pass. Fails on INT_MAX + 1: signed overflow.",
+      "suggestions": [
+        "a + b overflows on 32-bit signed ints. Use long long or check that b <= INT_MAX - a before adding."
+      ]
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 0.9,
+      "weight": 0.1,
+      "contribution": 9.0,
+      "evidence": {
+        "warning_count": 1,
+        "warnings": [
+          "warning: ignoring return value of 'scanf' [-Wunused-result]"
+        ],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "one -Wunused-result warning",
+      "suggestions": [
+        "Fix compiler diagnostic: warning: ignoring return value of 'scanf' [-Wunused-result]"
+      ]
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.6,
+      "weight": 0.1,
+      "contribution": 6.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 1,
+        "max_function_length": 7,
+        "total_loc": 7,
+        "functions": [
+          {
+            "name": "main",
+            "cyclomatic_complexity": 1,
+            "length": 6,
+            "nloc": 6
+          }
+        ]
+      },
+      "feedback": "no documentation headers, single-block code",
+      "suggestions": [
+        "Break logic into distinct visual sections and functions rather than a single monolithic block."
+      ]
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 0.3,
+      "weight": 0.1,
+      "contribution": 3.0,
+      "evidence": {
+        "functions_defined": 1,
+        "expected_min": 2,
+        "function_names": [
+          "main"
+        ]
+      },
+      "feedback": "only main(); no helper",
+      "suggestions": [
+        "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main."
+      ]
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 0.8,
+      "weight": 0.1,
+      "contribution": 8.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 6,
+        "failures": [
+          {
+            "case": "INT_MAX + 1 overflow",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "-2147483648",
+            "note": "signed integer overflow"
+          },
+          {
+            "case": "INT_MIN - 1 underflow",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "2147483647",
+            "note": "signed integer overflow"
+          }
+        ],
+        "overflow_handled": false
+      },
+      "feedback": "overflow on INT_MAX+1 not handled",
+      "suggestions": [
+        "Handle overflow explicitly with a wider integer type (e.g. long long) or bounds check b <= INT_MAX - a."
+      ]
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "required_complexity": "O(1)",
+        "detected_loops": 0,
+        "timing_curve": [
+          {
+            "size": 1,
+            "avg_duration_ms": 342.093
+          },
+          {
+            "size": 10,
+            "avg_duration_ms": 400.027
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 316.959
+          }
+        ],
+        "asymptotic_match": true
+      },
+      "feedback": "O(1) confirmed",
+      "suggestions": []
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "sanitizer_flags": "-fsanitize=address,undefined",
+        "diagnostics": [],
+        "allocations": 0,
+        "deallocations": 0
+      },
+      "feedback": "no diagnostics",
+      "suggestions": []
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "score": 0.5,
+      "weight": 0.1,
+      "contribution": 5.0,
+      "evidence": {
+        "model": "llama-3.3-70b-versatile",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\": 5, \"reasons\": [\"no comments\", \"Single-letter names\", \"missing whitespace\", \"cramped formatting\"]}",
+        "terse_variables_detected": [
+          "y"
+        ],
+        "comments_present": false
+      },
+      "feedback": "no comments, Single-letter names, missing whitespace, cramped formatting.",
+      "suggestions": [
+        "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+        "Add a one-line comment above main() explaining the purpose of the program.",
+        "Add spaces around arithmetic operators and blank lines between logical sections."
+      ]
+    },
+    {
+      "name": "originality",
+      "analyzer": "similarity_flag",
+      "score": 0.0,
+      "weight": 0.1,
+      "contribution": 0.0,
+      "evidence": {
+        "corpus_dir": "submissions/",
+        "flag_threshold": 0.85,
+        "max_similarity": 1.0,
+        "flagged": true,
+        "most_similar_file": "add_student.c",
+        "comparisons": [
+          {
+            "file": "add_compile_error.c",
+            "similarity": 0.183
+          },
+          {
+            "file": "add_crash_segfault.c",
+            "similarity": 0.559
+          },
+          {
+            "file": "add_infinite_loop.c",
+            "similarity": 0.459
+          },
+          {
+            "file": "add_memory_leak.c",
+            "similarity": 0.088
+          },
+          {
+            "file": "add_perfect.c",
+            "similarity": 0.054
+          },
+          {
+            "file": "add_student.c",
+            "similarity": 1.0
+          },
+          {
+            "file": "binary_search_linear.c",
+            "similarity": 0.12
+          },
+          {
+            "file": "binary_search_optimal.c",
+            "similarity": 0.042
+          },
+          {
+            "file": "palindrome_buggy.c",
+            "similarity": 0.057
+          },
+          {
+            "file": "palindrome_perfect.c",
+            "similarity": 0.029
+          },
+          {
+            "file": "stack_leaky.c",
+            "similarity": 0.042
+          },
+          {
+            "file": "stack_robust.c",
+            "similarity": 0.021
+          },
+          {
+            "file": "two_sum_optimal.c",
+            "similarity": 0.031
+          },
+          {
+            "file": "two_sum_quadratic.c",
+            "similarity": 0.099
+          }
+        ]
+      },
+      "feedback": "max similarity 1.00 with add_student.c exceeds 0.85 threshold (FLAGGED)",
+      "suggestions": [
+        "Ensure independent authoring; do not replicate template code or peer submissions."
+      ]
+    }
+  ],
+  "flags": [
+    "suspected_plagiarism"
+  ],
+  "suggestions": [
+    "a + b overflows on 32-bit signed ints. Use long long or check that b <= INT_MAX - a before adding.",
+    "Fix compiler diagnostic: warning: ignoring return value of 'scanf' [-Wunused-result]",
+    "Break logic into distinct visual sections and functions rather than a single monolithic block.",
+    "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.",
+    "Handle overflow explicitly with a wider integer type (e.g. long long) or bounds check b <= INT_MAX - a.",
+    "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+    "Add a one-line comment above main() explaining the purpose of the program.",
+    "Add spaces around arithmetic operators and blank lines between logical sections.",
+    "Ensure independent authoring; do not replicate template code or peer submissions."
+  ],
+  "deductions": [
+    "[CORRECTNESS] -2.0 pts: Failed 2 of 10 test cases: 8/10 tests pass. Fails on INT_MAX + 1: signed overflow..",
+    "[SYNTAX] -1.0 pts: Compiler warnings/errors detected: one -Wunused-result warning.",
+    "[STRUCTURE] -4.0 pts: Structural deficiencies: no documentation headers, single-block code.",
+    "[MODULARITY] -7.0 pts: Only main() defined; expected at least 2 functions (core logic should be in a helper function).",
+    "[LOGICAL] -2.0 pts: overflow on INT_MAX+1 not handled",
+    "[READABILITY] -5.0 pts: Readability/style deficiencies: no comments, Single-letter names, missing whitespace, cramped formatting..",
+    "[ORIGINALITY] -10.0 pts: Plagiarism/similarity penalty: max similarity 1.00 with add_student.c exceeds 0.85 threshold (FLAGGED)."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Coding-interview and hiring screens",
+        "example": "A company runs 500 candidate submissions for an 'add two integers safely' task. The agent ranks them by correctness, edge-case handling and memory safety, and gives an explainable per-metric score.",
+        "benefit": "Fast first-round filtering where every rejection can be justified metric by metric."
+      },
+      {
+        "use_case": "Plagiarism and LLM-copy triage for instructors",
+        "example": "Two submissions reach a similarity of 0.93 against the 0.85 threshold, so the agent raises a flag in the report. The instructor reviews only those pairs instead of all 300.",
+        "benefit": "Saves review time by narrowing manual checking to suspicious cases."
+      },
+      {
+        "use_case": "Continuous feedback in large-enrollment university CS labs",
+        "example": "400 students submitting weekly lab assignments get instant, reproducible feedback at 2 AM without waiting days for TA grading.",
+        "benefit": "Accelerates student learning cycle and unburdens teaching assistants."
+      },
+      {
+        "use_case": "CI/CD regression gating for mission-critical C software",
+        "example": "Pull requests must achieve 100/100 across correctness, sanitizers, and complexity bounds before merging into embedded systems firmware.",
+        "benefit": "Intercepts memory leaks and algorithmic latency regressions before production deployment."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Tests cannot prove correctness",
+        "example": "A submission passes all 10 hidden tests but fails when the input has extra whitespace or a trailing newline that no test covers. The agent still reports 10/10.",
+        "mitigation": "The agent should create its own extra tricky test inputs and compare the student's answers with the answers of a correct program."
+      },
+      {
+        "limitation": "Wall-clock timing curves are noisy on shared or virtualized machines",
+        "example": "A student's O(1) submission runs in 2ms on one execution, but during background OS scheduling spikes to 28ms, distorting empirical complexity estimation.",
+        "mitigation": "Normalize timings against a simultaneous baseline kernel or measure hardware instruction counts / CPU cycles instead of raw wall-clock time."
+      },
+      {
+        "limitation": "Surface similarity can be deceived by structural refactoring and obfuscation",
+        "example": "A student copies code from a peer but reorders independent statements, inserts dead variables, or wraps expressions in macros, dropping lexical n-gram similarity below 0.85.",
+        "mitigation": "Synthesize control-flow graphs (CFG) and compare normalized intermediate representations (LLVM IR / AST) rather than token text."
+      },
+      {
+        "limitation": "Compiler optimizations may mask undefined behavior or dead loops",
+        "example": "An uninitialized variable or dead infinite loop is eliminated by GCC at -O2 optimization level, allowing a flawed submission to pass smoke tests.",
+        "mitigation": "Compile and test across multiple optimization tiers (-O0, -O2, -Og) with ASan/UBSan instrumentation."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

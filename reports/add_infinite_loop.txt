@@ -1,0 +1,63 @@
+===== Grading report for add_infinite_loop.c =====
+Problem: add_two_integers
+Overall grade: 38.0 / 100
+Metric         Weight Score  Contribution Verdict
+correctness    20     0/20   0.0          Skipped: suspected infinite loop in smoke run.
+syntax         10     10/10  10.0         Clean compilation with zero warnings.
+structure      10     8/10   8.0          single-block code
+modularity     10     3/10   3.0          only main(); no helper
+logical        10     0/10   0.0          Skipped: suspected infinite loop in smoke run.
+complexity     10     0/10   0.0          Skipped: suspected infinite loop in smoke run.
+memory_safety  10     0/10   0.0          Skipped: suspected infinite loop in smoke run.
+readability    10     7/10   7.0          Single-letter names, missing whitespace.
+originality    10     10/10  10.0         max similarity 0.70, not flagged
+
+--- Why Your Grade Decreased (Deduction Analysis) ---
+- [CORRECTNESS] -20.0 pts: Failed 0 of 0 test cases: Skipped: suspected infinite loop in smoke run..
+- [STRUCTURE] -2.0 pts: Structural deficiencies: single-block code.
+- [MODULARITY] -7.0 pts: Only main() defined; expected at least 2 functions (core logic should be in a helper function).
+- [LOGICAL] -10.0 pts: Skipped: suspected infinite loop in smoke run.
+- [COMPLEXITY] -10.0 pts: Algorithmic complexity penalty: Skipped: suspected infinite loop in smoke run..
+- [MEMORY_SAFETY] -10.0 pts: Memory safety violation: Skipped: suspected infinite loop in smoke run..
+- [READABILITY] -3.0 pts: Readability/style deficiencies: Single-letter names, missing whitespace..
+
+--- Suggestions to raise the grade ---
+- Break logic into distinct visual sections and functions rather than a single monolithic block.
+- Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.
+- Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).
+- Add spaces around arithmetic operators and blank lines between logical sections.
+
+—-- Usefulness & limitations for add_two_integers —--
+Useful for:
+1. Coding-interview and hiring screens
+Example: A company runs 500 candidate submissions for an 'add two integers safely' task. The agent ranks them by correctness, edge-case handling and memory safety, and gives an explainable per-metric score.
+Benefit: Fast first-round filtering where every rejection can be justified metric by metric.
+
+2. Plagiarism and LLM-copy triage for instructors
+Example: Two submissions reach a similarity of 0.93 against the 0.85 threshold, so the agent raises a flag in the report. The instructor reviews only those pairs instead of all 300.
+Benefit: Saves review time by narrowing manual checking to suspicious cases.
+
+3. Continuous feedback in large-enrollment university CS labs
+Example: 400 students submitting weekly lab assignments get instant, reproducible feedback at 2 AM without waiting days for TA grading.
+Benefit: Accelerates student learning cycle and unburdens teaching assistants.
+
+4. CI/CD regression gating for mission-critical C software
+Example: Pull requests must achieve 100/100 across correctness, sanitizers, and complexity bounds before merging into embedded systems firmware.
+Benefit: Intercepts memory leaks and algorithmic latency regressions before production deployment.
+
+Limits of this report (add_two_integers):
+1. Tests cannot prove correctness
+Example: A submission passes all 10 hidden tests but fails when the input has extra whitespace or a trailing newline that no test covers. The agent still reports 10/10.
+Mitigation: The agent should create its own extra tricky test inputs and compare the student's answers with the answers of a correct program.
+
+2. Wall-clock timing curves are noisy on shared or virtualized machines
+Example: A student's O(1) submission runs in 2ms on one execution, but during background OS scheduling spikes to 28ms, distorting empirical complexity estimation.
+Mitigation: Normalize timings against a simultaneous baseline kernel or measure hardware instruction counts / CPU cycles instead of raw wall-clock time.
+
+3. Surface similarity can be deceived by structural refactoring and obfuscation
+Example: A student copies code from a peer but reorders independent statements, inserts dead variables, or wraps expressions in macros, dropping lexical n-gram similarity below 0.85.
+Mitigation: Synthesize control-flow graphs (CFG) and compare normalized intermediate representations (LLVM IR / AST) rather than token text.
+
+4. Compiler optimizations may mask undefined behavior or dead loops
+Example: An uninitialized variable or dead infinite loop is eliminated by GCC at -O2 optimization level, allowing a flawed submission to pass smoke tests.
+Mitigation: Compile and test across multiple optimization tiers (-O0, -O2, -Og) with ASan/UBSan instrumentation.

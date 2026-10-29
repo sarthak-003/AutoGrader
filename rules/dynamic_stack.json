@@ -1,0 +1,50 @@
+{
+  "problem": "dynamic_stack",
+  "time_limit_s": 1,
+  "memory_limit_mb": 64,
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "weight": 0.25,
+      "params": { "testset_dir": "tests/stack/" }
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "weight": 0.25,
+      "params": { "flags": "-fsanitize=address,undefined" }
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "weight": 0.15,
+      "params": { "expect_helpers": true, "min_functions": 3 }
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "weight": 0.10,
+      "params": { "flags": "-Wall -Wextra -Werror -std=c11" }
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "weight": 0.10,
+      "params": { "max_cyclomatic": 8, "max_function_length": 50 }
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "weight": 0.15,
+      "params": {
+        "custom_cases": [
+          { "input": "POP\nEXIT\n", "expected": "UNDERFLOW", "label": "pop from empty stack underflow" },
+          { "input": "PEEK\nEXIT\n", "expected": "EMPTY", "label": "peek on empty stack" },
+          { "input": "PUSH 99\nPOP\nPOP\nEXIT\n", "expected": "99\nUNDERFLOW", "label": "double pop on single element" }
+        ]
+      }
+    }
+  ]
+}
+

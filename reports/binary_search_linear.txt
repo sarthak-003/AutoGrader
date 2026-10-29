@@ -1,0 +1,35 @@
+===== Grading report for binary_search_linear.c =====
+Problem: binary_search
+Overall grade: 83.7 / 100
+Metric         Weight Score  Contribution Verdict
+correctness    25     25/25  25.0         All 10 tests pass cleanly.
+complexity     25     21/25  21.2         Logarithmic scaling observed across input bounds.
+modularity     15     4/15   4.5          only main(); no helper
+syntax         10     10/10  10.0         Clean compilation with zero warnings.
+structure      10     8/10   8.0          single-block code
+logical        15     15/15  15.0         All boundary edge cases (zeros, negatives, extreme values) passed cleanly.
+
+--- Why Your Grade Decreased (Deduction Analysis) ---
+- [COMPLEXITY] -3.8 pts: Algorithmic complexity penalty: Logarithmic scaling observed across input bounds..
+- [MODULARITY] -10.5 pts: Only main() defined; expected at least 2 functions (core logic should be in a helper function).
+- [STRUCTURE] -2.0 pts: Structural deficiencies: single-block code.
+
+--- Suggestions to raise the grade ---
+- Optimize algorithmic structure to achieve required O(log N) bound.
+- Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.
+- Break logic into distinct visual sections and functions rather than a single monolithic block.
+
+—-- Usefulness & limitations for binary_search —--
+Useful for:
+1. Logarithmic Algorithmic Gating (O(log N) Enforcement)
+Example: Verifies that students execute true divide-and-conquer binary search rather than passing with linear O(N) scans on sorted arrays.
+Benefit: Docks points on candidates who submit naive loops for logarithmic search questions.
+
+2. Integer Midpoint Overflow Bug Detection
+Example: Catches the infamous (low + high) / 2 signed overflow bug when searching arrays with large indices, enforcing low + (high - low) / 2.
+Benefit: Teaches robust numerical boundary handling in core algorithms.
+
+Limits of this report (binary_search):
+1. Small Array Size Anomaly
+Example: On very small arrays (N < 16), linear search can run faster than binary search due to branch prediction and CPU prefetching.
+Mitigation: Run complexity timing benchmarks on array sizes N >= 1,000 to isolate asymptotic scaling.

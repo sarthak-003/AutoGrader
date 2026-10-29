@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoGrader // Rule-Driven Evaluator</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --text-muted: #555555;
+      --border: #000000;
+      --border-subtle: #cccccc;
+      --card-bg: #ffffff;
+      --alt-bg: #fafafa;
+      --code-bg: #f5f5f5;
+      --code-border: #cccccc;
+      --btn-primary-bg: #000000;
+      --btn-primary-text: #ffffff;
+      --btn-secondary-bg: #ffffff;
+      --btn-secondary-text: #000000;
+      --tab-inactive: #f0f0f0;
+      --why-border: #000000;
+      --deduct-bg: #f9f9f9;
+      --deduct-border: #000000;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0d0d0d;
+      --text: #f0f0f0;
+      --text-muted: #999999;
+      --border: #ffffff;
+      --border-subtle: #444444;
+      --card-bg: #141414;
+      --alt-bg: #1a1a1a;
+      --code-bg: #1c1c1c;
+      --code-border: #333333;
+      --btn-primary-bg: #ffffff;
+      --btn-primary-text: #000000;
+      --btn-secondary-bg: #141414;
+      --btn-secondary-text: #ffffff;
+      --tab-inactive: #222222;
+      --why-border: #ffffff;
+      --deduct-bg: #1a1a1a;
+      --deduct-border: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      padding: 32px 20px;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: "Courier New", Courier, monospace;
+      margin-top: 4px;
+    }
+    .header-links {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .header-links a, .theme-toggle-btn {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .header-links a:hover, .theme-toggle-btn:hover {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+    }
+
+    /* Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 860px) {
+      .grid {
+        grid-template-columns: 360px 1fr;
+      }
+    }
+
+    /* Cards */
+    .card {
+      border: 1px solid var(--border);
+      padding: 20px;
+      background-color: var(--card-bg);
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    select, input[type="file"], textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--card-bg);
+      color: var(--text);
+      outline: none;
+      border-radius: 0;
+    }
+    select:focus, textarea:focus {
+      outline: 2px solid var(--border);
+    }
+    textarea {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 12px;
+      height: 120px;
+      resize: vertical;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      border-radius: 0;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn-black {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+    }
+    .btn-black:hover {
+      opacity: 0.85;
+    }
+    .btn-white {
+      background-color: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      margin-top: 8px;
+    }
+    .btn-white:hover {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+    }
+
+    /* Tabs */
+    .tab-nav {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 6px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: none;
+      background: var(--tab-inactive);
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+    }
+    .tab-btn.active {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+    }
+
+    /* Results */
+    .grade-badge-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 2px solid var(--border);
+      padding: 16px;
+      margin-bottom: 20px;
+      background-color: var(--alt-bg);
+    }
+    .grade-number {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .grade-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .first-pass-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+    }
+    .pill-black {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+    }
+    th {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    tr:nth-child(even) td {
+      background-color: var(--alt-bg);
+    }
+
+    /* Deduction boxes */
+    .deduct-box {
+      border-left: 3px solid var(--border);
+      background-color: var(--deduct-bg);
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    /* Counter-tests & diagnostics */
+    .diagnostic-box {
+      border: 1px solid var(--border);
+      padding: 14px;
+      margin-bottom: 16px;
+      background-color: var(--card-bg);
+    }
+    .diagnostic-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    pre {
+      background-color: var(--code-bg);
+      border: 1px solid var(--code-border);
+      color: var(--text);
+      padding: 10px;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 11.5px;
+      overflow-x: auto;
+      margin-bottom: 8px;
+    }
+    .why-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--code-bg);
+      padding: 6px 10px;
+      border-left: 3px solid var(--why-border);
+    }
+
+    .action-links {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .action-links a {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .action-links a:hover {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+    }
+
+    /* Loading overlay */
+    #loading-indicator {
+      display: none;
+      padding: 30px;
+      text-align: center;
+      font-family: "Courier New", Courier, monospace;
+      font-weight: 700;
+      font-size: 13px;
+      border: 1px dashed var(--border);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>AutoGrader // Rule-Driven Evaluator</h1>
+      <div class="subtitle">AUTONOMOUS C EVALUATION &bull; TIME & MEMORY SANDBOXED</div>
+    </div>
+    <div class="header-links">
+      <button type="button" class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">THEME: DARK</button>
+      <a href="/download/pdf" target="_blank">&darr; Download agentic01.pdf</a>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- Left Column: Controls -->
+    <div>
+      <div class="card">
+        <div class="card-title">1. Select Submission</div>
+
+        <div class="tab-nav">
+          <button type="button" class="tab-btn active" onclick="switchTab('sample')">Sample File</button>
+          <button type="button" class="tab-btn" onclick="switchTab('upload')">Upload .C</button>
+          <button type="button" class="tab-btn" onclick="switchTab('paste')">Paste Code</button>
+        </div>
+
+        <form id="grade-form" onsubmit="handleEvaluate(event)">
+          <!-- Tab 1: Sample -->
+          <div id="tab-sample" class="form-group">
+            <label for="sample_file">Sample Submissions</label>
+            <select id="sample_file" name="sample_file">
+              {% for s in sample_files %}
+                <option value="{{ s }}">{{ s }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Tab 2: Upload -->
+          <div id="tab-upload" class="form-group" style="display: none;">
+            <label for="upload_file">Upload .C Source File</label>
+            <input type="file" id="upload_file" name="upload_file" accept=".c">
+          </div>
+
+          <!-- Tab 3: Paste -->
+          <div id="tab-paste" class="form-group" style="display: none;">
+            <label for="code_text">Paste C Code</label>
+            <textarea id="code_text" name="code_text" placeholder="#include <stdio.h>&#10;int main() { ... }"></textarea>
+          </div>
+
+          <div class="card-title" style="margin-top: 20px;">2. Grading Rules</div>
+          <div class="form-group">
+            <label for="rules_file">External Rule Set</label>
+            <select id="rules_file" name="rules_file">
+              {% for r in rule_files %}
+                <option value="{{ r }}">{{ r }}</option>
+              {% endfor %}
+            </select>
+            <button type="button" class="btn btn-white" style="margin-top: 6px; font-size: 11px; padding: 5px 8px; width: 100%;" onclick="toggleNewProblemModal()">+ Create New Problem Rule & Testcases</button>
+          </div>
+
+          <!-- Collapsible New Problem Builder -->
+          <div id="new-problem-panel" style="display: none; border: 1px solid var(--border); padding: 12px; margin-bottom: 16px; background-color: var(--alt-bg);">
+            <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">New Problem Rule Creator</div>
+            <div class="form-group">
+              <label for="new_prob_name">Problem Identifier</label>
+              <input type="text" id="new_prob_name" placeholder="e.g. reverse_string, matrix_multiply">
+            </div>
+            <div class="form-group">
+              <label for="new_prob_complexity">Target Complexity Bound</label>
+              <select id="new_prob_complexity">
+                <option value="O(N)">O(N) - Linear Scaling</option>
+                <option value="O(log N)">O(log N) - Divide &amp; Conquer</option>
+                <option value="O(1)">O(1) - Constant Time</option>
+                <option value="O(N^2)">O(N^2) - Quadratic Allowed</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="new_prob_input">Test Case 1: Input (.in)</label>
+              <textarea id="new_prob_input" rows="2" placeholder="5&#10;1 2 3 4 5"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="new_prob_output">Test Case 1: Expected Output (.out)</label>
+              <textarea id="new_prob_output" rows="2" placeholder="15"></textarea>
+            </div>
+            <button type="button" class="btn btn-black" style="font-size: 11px; padding: 6px 10px;" onclick="submitNewProblem()">Save &amp; Register Problem</button>
+            <button type="button" class="btn btn-white" style="font-size: 11px; padding: 6px 10px; margin-left: 6px;" onclick="toggleNewProblemModal()">Cancel</button>
+          </div>
+
+          <button type="submit" class="btn btn-black" id="eval-btn">Evaluate Submission</button>
+          <button type="button" class="btn btn-white" onclick="handleBatchGrade()">Batch Grade Submissions/</button>
+        </form>
+      </div>
+
+      <!-- Quick Deliverables Box -->
+      <div class="card" style="margin-top: 20px;">
+        <div class="card-title">Contract & Provenance</div>
+        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px;">
+          <b>Reproducibility Contract</b>:<br>
+          Same submission + Same rules &rarr; Identical grade.
+        </p>
+        <p style="font-size: 11px; font-family: 'Courier New', Courier, monospace; color: var(--text-muted);">
+          Isolation: Sandboxed process supervisor<br>
+          Timeout: 1.0s &bull; Memory cap: 64MB<br>
+          Seed: 42 &bull; Temp: 0.0 &bull; Multi-solution Judge
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Column: Results -->
+    <div>
+      <div id="loading-indicator">
+        RUNNING AGENT &bull; SANITY SWEEP &bull; DISPATCHING SPECIALIST ANALYZERS...
+      </div>
+
+      <div id="results-container">
+        <!-- Default placeholder before evaluation -->
+        <div class="card" id="empty-state">
+          <div class="card-title">Evaluation Report</div>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Select a submission and rule set, then click <b>"Evaluate Submission"</b> to run the autonomous grading pipeline.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme Switcher Logic
+    function initTheme() {
+      const saved = localStorage.getItem('autograder_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      updateThemeButton(saved);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('autograder_theme', next);
+      updateThemeButton(next);
+    }
+
+    function updateThemeButton(theme) {
+      const btn = document.getElementById('theme-btn');
+      if (btn) {
+        btn.textContent = theme === 'light' ? 'THEME: DARK' : 'THEME: LIGHT';
+      }
+    }
+
+    initTheme();
+
+    let currentTab = 'sample';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.getElementById('tab-sample').style.display = tab === 'sample' ? 'block' : 'none';
+      document.getElementById('tab-upload').style.display = tab === 'upload' ? 'block' : 'none';
+      document.getElementById('tab-paste').style.display = tab === 'paste' ? 'block' : 'none';
+    }
+
+    async function handleEvaluate(e) {
+      e.preventDefault();
+      const form = document.getElementById('grade-form');
+      const formData = new FormData(form);
+      formData.append('submission_mode', currentTab);
+
+      const loader = document.getElementById('loading-indicator');
+      const evalBtn = document.getElementById('eval-btn');
+
+      loader.style.display = 'block';
+      evalBtn.disabled = true;
+
+      try {
+        const response = await fetch('/evaluate', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        if (data.error) {
+          alert('Error: ' + data.error);
+          return;
+        }
+
+        renderResult(data);
+      } catch (err) {
+        alert('Evaluation error: ' + err);
+      } finally {
+        loader.style.display = 'none';
+        evalBtn.disabled = false;
+      }
+    }
+
+    async function handleBatchGrade() {
+      const rules = document.getElementById('rules_file').value;
+      const loader = document.getElementById('loading-indicator');
+      loader.style.display = 'block';
+
+      try {
+        const response = await fetch('/batch-grade?rules=' + encodeURIComponent(rules));
+        const data = await response.json();
+        renderBatchResult(data);
+      } catch (err) {
+        alert('Batch grading error: ' + err);
+      } finally {
+        loader.style.display = 'none';
+      }
+    }
+
+    function renderResult(rep) {
+      const container = document.getElementById('results-container');
+      const stem = rep.submission.replace(/\.c$/, '');
+
+      let html = `
+        <div class="card">
+          <div class="grade-badge-wrap">
+            <div>
+              <div class="grade-label">Overall Grade // ${rep.submission} (${rep.problem || 'Rule Target'})</div>
+              <div class="grade-number">${rep.grade.toFixed(1)} <span style="font-size: 18px; font-weight: 500;">/ 100</span></div>
+            </div>
+            <div class="first-pass-pills">
+              <span class="pill ${rep.first_pass.compiled ? 'pill-black' : ''}">Compiled: ${rep.first_pass.compiled ? 'YES' : 'NO'}</span>
+              <span class="pill ${rep.first_pass.smoke_ok ? 'pill-black' : ''}">Smoke: ${rep.first_pass.smoke_ok ? 'OK' : 'FAIL'}</span>
+              ${rep.first_pass.suspected_infinite_loop ? '<span class="pill pill-black">LOOP SUSPECTED</span>' : ''}
+              ${rep.flags && rep.flags.includes('suspected_plagiarism') ? '<span class="pill pill-black">PLAGIARISM FLAGGED</span>' : ''}
+            </div>
+          </div>
+
+          <div class="card-title">Scorecard Breakdown</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Weight</th>
+                <th>Score</th>
+                <th>Contribution</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      rep.metrics.forEach(m => {
+        const weightPct = Math.round(m.weight * 100);
+        const scoreStr = `${Math.round(m.score * weightPct)}/${weightPct}`;
+        html += `
+          <tr>
+            <td><b>${m.name}</b></td>
+            <td>${weightPct}%</td>
+            <td>${scoreStr}</td>
+            <td>${m.contribution.toFixed(1)}</td>
+            <td>${m.feedback}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+      `;
+
+      // Why Your Grade Decreased (Deduction Analysis)
+      if (rep.deductions && rep.deductions.length > 0) {
+        html += `<div class="card-title" style="margin-top: 20px;">Why Your Grade Decreased (Deduction Analysis)</div>`;
+        rep.deductions.forEach(d => {
+          html += `
+            <div class="deduct-box">
+              ${d}
+            </div>
+          `;
+        });
+      } else {
+        html += `
+          <div class="deduct-box" style="border-color: #22c55e;">
+            <b>CLEAN EVALUATION</b> &bull; Zero point deductions across all metrics!
+          </div>
+        `;
+      }
+
+      // Check for failing test cases
+      let failures = [];
+      rep.metrics.forEach(m => {
+        if (m.evidence && m.evidence.failing && m.evidence.failing.length > 0) {
+          failures = failures.concat(m.evidence.failing);
+        }
+      });
+
+      if (failures.length > 0) {
+        html += `<div class="card-title" style="margin-top: 20px;">Counter-Tests & Failures</div>`;
+        failures.forEach((f, idx) => {
+          html += `
+            <div class="diagnostic-box">
+              <div class="diagnostic-title">Failure #${idx + 1} &bull; Input Exposure</div>
+              <pre>INPUT:    ${f.input}\nEXPECTED: ${f.expected}\nGOT:      ${f.got ? f.got : '(' + f.note + ')'}</pre>
+              <div class="why-text">WHY: ${f.note || 'Output does not satisfy problem assertion.'}</div>
+            </div>
+          `;
+        });
+      }
+
+      // Suggestions
+      if (rep.suggestions && rep.suggestions.length > 0) {
+        html += `
+          <div class="card-title" style="margin-top: 20px;">Suggestions to Raise Grade</div>
+          <ul style="font-size: 12.5px; padding-left: 20px; margin-bottom: 20px;">
+        `;
+        rep.suggestions.forEach(s => {
+          html += `<li style="margin-bottom: 4px;">${s}</li>`;
+        });
+        html += `</ul>`;
+      }
+
+      // Action links
+      html += `
+          <div class="action-links">
+            <a href="/download/report/${stem}.txt" target="_blank">&darr; Download Text Report (.txt)</a>
+            <a href="/download/report/${stem}.json" target="_blank">&darr; Download JSON Report (.json)</a>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function renderBatchResult(batch) {
+      const container = document.getElementById('results-container');
+      let html = `
+        <div class="card">
+          <div class="card-title">Batch Evaluation Results (${batch.length} Submissions)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Submission</th>
+                <th>Compiled</th>
+                <th>Smoke</th>
+                <th>Grade</th>
+                <th>Reports</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      batch.forEach(item => {
+        const stem = item.submission.replace(/\.c$/, '');
+        html += `
+          <tr>
+            <td><b>${item.submission}</b></td>
+            <td>${item.first_pass.compiled ? 'YES' : 'NO'}</td>
+            <td>${item.first_pass.smoke_ok ? 'PASS' : 'FAIL'}</td>
+            <td><b>${item.grade.toFixed(1)} / 100</b></td>
+            <td>
+              <a href="/download/report/${stem}.txt" target="_blank" style="color: var(--text); font-weight: 700; text-decoration: underline; margin-right: 8px;">TXT</a>
+              <a href="/download/report/${stem}.json" target="_blank" style="color: var(--text); font-weight: 700; text-decoration: underline;">JSON</a>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+      container.innerHTML = html;
+    }
+
+    function toggleNewProblemModal() {
+      const panel = document.getElementById('new-problem-panel');
+      panel.style.display = (panel.style.display === 'none' || !panel.style.display) ? 'block' : 'none';
+    }
+
+    async function submitNewProblem() {
+      const name = document.getElementById('new_prob_name').value.trim();
+      if (!name) {
+        alert('Please enter a problem identifier name.');
+        return;
+      }
+      const complexity = document.getElementById('new_prob_complexity').value;
+      const testIn = document.getElementById('new_prob_input').value;
+      const testOut = document.getElementById('new_prob_output').value;
+
+      const payload = {
+        problem_name: name,
+        time_limit_s: 2.0,
+        memory_limit_mb: 64,
+        complexity: complexity,
+        testcases: (testIn || testOut) ? [{ input: testIn, output: testOut }] : []
+      };
+
+      try {
+        const resp = await fetch('/create-rule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await resp.json();
+        if (result.error) {
+          alert('Failed to create problem: ' + result.error);
+          return;
+        }
+
+        alert(`Successfully created rule '${result.rule_file}' and test directory '${result.tests_dir}'!`);
+        toggleNewProblemModal();
+
+        // Refresh rules dropdown
+        const rulesResp = await fetch('/rules-list');
+        const rulesData = await rulesResp.json();
+        const select = document.getElementById('rules_file');
+        select.innerHTML = '';
+        rulesData.rules.forEach(r => {
+          const opt = document.createElement('option');
+          opt.value = r;
+          opt.textContent = r;
+          if (r === result.rule_file) opt.selected = true;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        alert('Network error creating problem: ' + err);
+      }
+    }
+  </script>
+
+</body>
+</html>

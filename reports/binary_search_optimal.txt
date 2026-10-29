@@ -1,0 +1,31 @@
+===== Grading report for binary_search_optimal.c =====
+Problem: binary_search
+Overall grade: 96.0 / 100
+Metric         Weight Score  Contribution Verdict
+correctness    25     25/25  25.0         All 10 tests pass cleanly.
+complexity     25     25/25  25.0         O(log N) divide-and-conquer confirmed (bisection pattern detected)
+modularity     15     15/15  15.0         2 functions defined (modular helper architecture verified)
+syntax         10     10/10  10.0         Clean compilation with zero warnings.
+structure      10     6/10   6.0          cyclomatic complexity 7 > 6, function length 53 > 35
+logical        15     15/15  15.0         All boundary edge cases (zeros, negatives, extreme values) passed cleanly.
+
+--- Why Your Grade Decreased (Deduction Analysis) ---
+- [STRUCTURE] -4.0 pts: Structural deficiencies: cyclomatic complexity 7 > 6, function length 53 > 35.
+
+--- Suggestions to raise the grade ---
+- Reduce branching complexity (current cyclomatic complexity is 7).
+
+—-- Usefulness & limitations for binary_search —--
+Useful for:
+1. Logarithmic Algorithmic Gating (O(log N) Enforcement)
+Example: Verifies that students execute true divide-and-conquer binary search rather than passing with linear O(N) scans on sorted arrays.
+Benefit: Docks points on candidates who submit naive loops for logarithmic search questions.
+
+2. Integer Midpoint Overflow Bug Detection
+Example: Catches the infamous (low + high) / 2 signed overflow bug when searching arrays with large indices, enforcing low + (high - low) / 2.
+Benefit: Teaches robust numerical boundary handling in core algorithms.
+
+Limits of this report (binary_search):
+1. Small Array Size Anomaly
+Example: On very small arrays (N < 16), linear search can run faster than binary search due to branch prediction and CPU prefetching.
+Mitigation: Run complexity timing benchmarks on array sizes N >= 1,000 to isolate asymptotic scaling.

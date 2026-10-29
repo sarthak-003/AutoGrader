@@ -1,0 +1,65 @@
+===== Grading report for tmp_d7ko2kf.c =====
+Overall grade: 65.5 / 100
+Metric         Weight Score  Contribution Verdict
+correctness    30     0/30   0.0          0/3 tests pass. Fails on INT_MAX + 1: signed overflow.
+syntax         15     15/15  15.0         Clean compilation with zero warnings.
+structure      15     15/15  15.0         Clean structure (CCN 2, max len 29 LOC).
+modularity     10     10/10  10.0         3 functions defined (modular helper architecture verified)
+complexity     15     10/15  10.5         Possible nested loops (2) detected exceeding O(N).
+readability    15     15/15  15.0         Clean formatting, descriptive identifiers, well-commented.
+
+--- Where you failed ---
+Test 01 INPUT: 5
+1 2 3 4 5
+EXPECTED: 5 4 3 2 1
+GOT: 6 5 4 3 2 1
+WHY: Wrong Answer
+Test 02 INPUT: 1
+42
+EXPECTED: 42
+GOT: 6 5 4 3 2 1
+WHY: Wrong Answer
+Test 03 INPUT: 4
+-10 20 -30 40
+EXPECTED: 40 -30 20 -10
+GOT: 6 5 4 3 2 1
+WHY: Wrong Answer
+
+--- Suggestions to raise the grade ---
+- Output mismatch: got '6 5 4 3 2 1', expected '5 4 3 2 1'.
+- Optimize algorithmic structure to achieve required O(N) bound.
+
+—-- Usefulness & limitations of this evaluation —--
+Useful for:
+1. Coding-interview and hiring screens
+Example: A company runs 500 candidate submissions for an 'add two integers safely' task. The agent ranks them by correctness, edge-case handling and memory safety, and gives an explainable per-metric score.
+Benefit: Fast first-round filtering where every rejection can be justified metric by metric.
+
+2. Plagiarism and LLM-copy triage for instructors
+Example: Two submissions reach a similarity of 0.93 against the 0.85 threshold, so the agent raises a flag in the report. The instructor reviews only those pairs instead of all 300.
+Benefit: Saves review time by narrowing manual checking to suspicious cases.
+
+3. Continuous feedback in large-enrollment university CS labs
+Example: 400 students submitting weekly lab assignments get instant, reproducible feedback at 2 AM without waiting days for TA grading.
+Benefit: Accelerates student learning cycle and unburdens teaching assistants.
+
+4. CI/CD regression gating for mission-critical C software
+Example: Pull requests must achieve 100/100 across correctness, sanitizers, and complexity bounds before merging into embedded systems firmware.
+Benefit: Intercepts memory leaks and algorithmic latency regressions before production deployment.
+
+Limits of this report:
+1. Tests cannot prove correctness
+Example: A submission passes all 10 hidden tests but fails when the input has extra whitespace or a trailing newline that no test covers. The agent still reports 10/10.
+Mitigation: The agent should create its own extra tricky test inputs and compare the student's answers with the answers of a correct program.
+
+2. Wall-clock timing curves are noisy on shared or virtualized machines
+Example: A student's O(1) submission runs in 2ms on one execution, but during background OS scheduling spikes to 28ms, distorting empirical complexity estimation.
+Mitigation: Normalize timings against a simultaneous baseline kernel or measure hardware instruction counts / CPU cycles instead of raw wall-clock time.
+
+3. Surface similarity can be deceived by structural refactoring and obfuscation
+Example: A student copies code from a peer but reorders independent statements, inserts dead variables, or wraps expressions in macros, dropping lexical n-gram similarity below 0.85.
+Mitigation: Synthesize control-flow graphs (CFG) and compare normalized intermediate representations (LLVM IR / AST) rather than token text.
+
+4. Compiler optimizations may mask undefined behavior or dead loops
+Example: An uninitialized variable or dead infinite loop is eliminated by GCC at -O2 optimization level, allowing a flawed submission to pass smoke tests.
+Mitigation: Compile and test across multiple optimization tiers (-O0, -O2, -Og) with ASan/UBSan instrumentation.

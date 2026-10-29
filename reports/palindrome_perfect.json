@@ -1,0 +1,188 @@
+{
+  "submission": "palindrome_perfect.c",
+  "problem": "palindrome_checker",
+  "rules_hash": "sha256:efc562636cc0796d3267631cd9226cbf6428a711920773d8917362d3cb594552",
+  "grade": 90.0,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "tests_passed": 10,
+        "tests_total": 10,
+        "failing": []
+      },
+      "feedback": "All 10 tests pass cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.6,
+      "weight": 0.1,
+      "contribution": 6.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 8,
+        "max_function_length": 49,
+        "total_loc": 49,
+        "functions": [
+          {
+            "name": "is_palindrome",
+            "cyclomatic_complexity": 8,
+            "length": 22,
+            "nloc": 19
+          },
+          {
+            "name": "main",
+            "cyclomatic_complexity": 6,
+            "length": 21,
+            "nloc": 17
+          }
+        ]
+      },
+      "feedback": "cyclomatic complexity 8 > 6, function length 49 > 35",
+      "suggestions": [
+        "Reduce branching complexity (current cyclomatic complexity is 8)."
+      ]
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "functions_defined": 2,
+        "expected_min": 2,
+        "function_names": [
+          "is_palindrome",
+          "main"
+        ]
+      },
+      "feedback": "2 functions defined (modular helper architecture verified)",
+      "suggestions": []
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 4,
+        "failures": [],
+        "overflow_handled": true
+      },
+      "feedback": "All boundary edge cases (zeros, negatives, extreme values) passed cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 0.4,
+      "weight": 0.1,
+      "contribution": 4.0,
+      "evidence": {
+        "required_complexity": "O(N)",
+        "detected_loops": 3,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 475.176
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 591.245
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 439.749
+          }
+        ],
+        "asymptotic_match": false
+      },
+      "feedback": "Detected nested loops yielding O(N^2), strictly violating O(N) requirement.",
+      "suggestions": [
+        "Optimize algorithmic structure to achieve required O(N) bound."
+      ]
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "sanitizer_flags": "-fsanitize=address,undefined",
+        "diagnostics": [],
+        "allocations": 1,
+        "deallocations": 1
+      },
+      "feedback": "no diagnostics",
+      "suggestions": []
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Reduce branching complexity (current cyclomatic complexity is 8).",
+    "Optimize algorithmic structure to achieve required O(N) bound."
+  ],
+  "deductions": [
+    "[STRUCTURE] -4.0 pts: Structural deficiencies: cyclomatic complexity 8 > 6, function length 49 > 35.",
+    "[COMPLEXITY] -6.0 pts: Algorithmic complexity penalty: Detected nested loops yielding O(N^2), strictly violating O(N) requirement.."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Bioinformatics & DNA Sequence Analysis",
+        "example": "Verifies algorithms checking reverse-complement genetic palindromes and restriction enzyme recognition sites.",
+        "benefit": "Enforces linear O(N) sequence parsing with zero memory overhead."
+      },
+      {
+        "use_case": "String Processing & Buffer Sanitization Screening",
+        "example": "Tests handling of punctuation, multi-word phrases with spaces ('step on no pets'), and odd vs even length palindromes.",
+        "benefit": "Validates boundary string safety and prevents buffer overruns."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "ASCII Assumptions on Multi-Byte UTF-8 Runes",
+        "example": "A submission passing all ASCII tests fails when given multi-byte UTF-8 accented characters like '\u00e9' or non-Latin scripts.",
+        "mitigation": "Incorporate wide-character wchar_t / UTF-8 multi-byte test suites into language rules."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

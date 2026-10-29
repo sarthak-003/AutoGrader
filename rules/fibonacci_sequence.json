@@ -1,0 +1,86 @@
+{
+  "problem": "fibonacci_sequence",
+  "time_limit_s": 2.0,
+  "memory_limit_mb": 64,
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "weight": 0.25,
+      "params": {
+        "testset_dir": "tests/fibonacci_sequence/"
+      }
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "weight": 0.2,
+      "params": {
+        "required": "O(N)",
+        "input_type": "array",
+        "sizes": [
+          10,
+          100,
+          1000
+        ]
+      }
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "weight": 0.15,
+      "params": {
+        "expect_helpers": true,
+        "min_functions": 2
+      }
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "weight": 0.1,
+      "params": {
+        "flags": "-Wall -Wextra -Werror -std=c11"
+      }
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "weight": 0.1,
+      "params": {
+        "max_cyclomatic": 6,
+        "max_function_length": 40
+      }
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "weight": 0.1,
+      "params": {
+        "custom_cases": [
+          {
+            "input": "1\n0\n",
+            "expected": "0",
+            "label": "Zero boundary condition"
+          },
+          {
+            "input": "2\n-10 -20\n",
+            "expected": "-30",
+            "label": "Negative values boundary"
+          }
+        ]
+      }
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "weight": 0.1,
+      "params": {
+        "model": "llama-3.3-70b-versatile",
+        "use_ollama": false,
+        "ollama_model": "llama3",
+        "temperature": 0,
+        "seed": 42
+      }
+    }
+  ]
+}

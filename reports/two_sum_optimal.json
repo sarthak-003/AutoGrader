@@ -1,0 +1,203 @@
+{
+  "submission": "two_sum_optimal.c",
+  "problem": "two_sum_sorted",
+  "rules_hash": "sha256:cd1d95fb81670ea8b6d0766c0e4243cbe9f29fe2e4d400c77ab9dd636e78067b",
+  "grade": 95.0,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": false,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "tests_passed": 10,
+        "tests_total": 10,
+        "failing": []
+      },
+      "feedback": "All 10 tests pass cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "required_complexity": "O(N)",
+        "detected_loops": 2,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 193.076
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 197.712
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 171.723
+          }
+        ],
+        "asymptotic_match": true
+      },
+      "feedback": "O(N) confirmed",
+      "suggestions": []
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.8,
+      "weight": 0.1,
+      "contribution": 8.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 8,
+        "max_function_length": 59,
+        "total_loc": 59,
+        "functions": [
+          {
+            "name": "find_two_sum",
+            "cyclomatic_complexity": 6,
+            "length": 22,
+            "nloc": 20
+          },
+          {
+            "name": "main",
+            "cyclomatic_complexity": 8,
+            "length": 34,
+            "nloc": 29
+          }
+        ]
+      },
+      "feedback": "function length 59 > 40",
+      "suggestions": []
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "functions_defined": 2,
+        "expected_min": 2,
+        "function_names": [
+          "find_two_sum",
+          "main"
+        ]
+      },
+      "feedback": "2 functions defined (modular helper architecture verified)",
+      "suggestions": []
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 3,
+        "failures": [],
+        "overflow_handled": true
+      },
+      "feedback": "All boundary edge cases (zeros, negatives, extreme values) passed cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "score": 0.7,
+      "weight": 0.1,
+      "contribution": 7.0,
+      "evidence": {
+        "backend": "deterministic_ast_engine",
+        "model": "llama-3.3-70b-versatile",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\": 7, \"reasons\": [\"Single-letter names\", \"missing whitespace\"]}",
+        "terse_variables_detected": [
+          "i"
+        ],
+        "comments_present": true
+      },
+      "feedback": "Single-letter names, missing whitespace.",
+      "suggestions": [
+        "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+        "Add spaces around arithmetic operators and blank lines between logical sections."
+      ]
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+    "Add spaces around arithmetic operators and blank lines between logical sections."
+  ],
+  "deductions": [
+    "[STRUCTURE] -2.0 pts: Structural deficiencies: function length 59 > 40.",
+    "[READABILITY] -3.0 pts: Readability/style deficiencies: Single-letter names, missing whitespace.."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Algorithmic Efficiency Screening in Quantitative & Tech Interviews",
+        "example": "Evaluates whether candidates discover the O(N) two-pointer technique on sorted arrays versus naive O(N^2) brute-force nested loops across 10,000+ elements.",
+        "benefit": "Automates algorithmic performance gating without subjective manual code reviews."
+      },
+      {
+        "use_case": "Special Judge Multi-Solution Verification",
+        "example": "When an array contains multiple valid index pairs (e.g. arr[1]+arr[4]=70 and arr[2]+arr[3]=70), the agent accepts any mathematically valid pair.",
+        "benefit": "Eliminates false negatives common in rigid exact-match string diff graders."
+      },
+      {
+        "use_case": "Memory Bounds & Linear Array Traversal Gating",
+        "example": "Verifies that array indexing does not produce off-by-one errors or out-of-bounds access on negative target numbers.",
+        "benefit": "Guarantees runtime index safety prior to production algorithm deployment."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Multi-solution Non-determinism with Rigid Checkers",
+        "example": "If a student outputs a different valid index pair than the single reference output, strict line-by-line diffs fail unless a Special Judge is active.",
+        "mitigation": "AutoGrader includes an integrated two_sum validator that verifies arr[i] + arr[j] == target dynamically."
+      },
+      {
+        "limitation": "CPU L1/L2 Cache Locality Skewing Timing Curves",
+        "example": "An O(N) linear scan on a small array fits entirely in CPU cache, showing sub-microsecond runtimes that distort empirical curve fitting.",
+        "mitigation": "Profile hardware instruction retirement counts and CPU cycles rather than raw wall-clock duration."
+      }
+    ],
+    "problem": "two_sum_sorted"
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

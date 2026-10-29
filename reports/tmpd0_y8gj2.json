@@ -1,0 +1,220 @@
+{
+  "submission": "tmpd0_y8gj2.c",
+  "rules_hash": "sha256:562e71d6936d64fa8a0808634e04fd3afcf0efead958fb9704c8d2cda04517bd",
+  "grade": 65.5,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 0.0,
+      "weight": 0.3,
+      "contribution": 0.0,
+      "evidence": {
+        "tests_passed": 0,
+        "tests_total": 3,
+        "failing": [
+          {
+            "test_name": "test_01",
+            "input": "5\n1 2 3 4 5",
+            "expected": "5 4 3 2 1",
+            "got": "Original array: 1 2 3 4 5 6 \nReversed array: 6 5 4 3 2 1",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_02",
+            "input": "1\n42",
+            "expected": "42",
+            "got": "Original array: 1 2 3 4 5 6 \nReversed array: 6 5 4 3 2 1",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_03",
+            "input": "4\n-10 20 -30 40",
+            "expected": "40 -30 20 -10",
+            "got": "Original array: 1 2 3 4 5 6 \nReversed array: 6 5 4 3 2 1",
+            "note": "Wrong Answer"
+          }
+        ]
+      },
+      "feedback": "0/3 tests pass. Fails on INT_MAX + 1: signed overflow.",
+      "suggestions": [
+        "Output mismatch: got 'Original array: 1 2 3 4 5 6 \nReversed array: 6 5 4 3 2 1', expected '5 4 3 2 1'."
+      ]
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 2,
+        "max_function_length": 30,
+        "total_loc": 30,
+        "functions": [
+          {
+            "name": "reverseArray",
+            "cyclomatic_complexity": 2,
+            "length": 29,
+            "nloc": 11
+          },
+          {
+            "name": "printArray",
+            "cyclomatic_complexity": 2,
+            "length": 11,
+            "nloc": 6
+          },
+          {
+            "name": "main",
+            "cyclomatic_complexity": 1,
+            "length": 27,
+            "nloc": 10
+          }
+        ]
+      },
+      "feedback": "Clean structure (CCN 2, max len 30 LOC).",
+      "suggestions": []
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "functions_defined": 3,
+        "expected_min": 2,
+        "function_names": [
+          "reverseArray",
+          "printArray",
+          "main"
+        ]
+      },
+      "feedback": "3 functions defined (modular helper architecture verified)",
+      "suggestions": []
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 0.7,
+      "weight": 0.15,
+      "contribution": 10.5,
+      "evidence": {
+        "required_complexity": "O(N)",
+        "detected_loops": 2,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 36.809
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 55.752
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 44.282
+          }
+        ],
+        "asymptotic_match": false
+      },
+      "feedback": "Possible nested loops (2) detected exceeding O(N).",
+      "suggestions": [
+        "Optimize algorithmic structure to achieve required O(N) bound."
+      ]
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "model": "llama-3.3-70b-versatile",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\": 10, \"reasons\": []}",
+        "terse_variables_detected": [],
+        "comments_present": true
+      },
+      "feedback": "Clean formatting, descriptive identifiers, well-commented.",
+      "suggestions": []
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Output mismatch: got 'Original array: 1 2 3 4 5 6 \nReversed array: 6 5 4 3 2 1', expected '5 4 3 2 1'.",
+    "Optimize algorithmic structure to achieve required O(N) bound."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Coding-interview and hiring screens",
+        "example": "A company runs 500 candidate submissions for an 'add two integers safely' task. The agent ranks them by correctness, edge-case handling and memory safety, and gives an explainable per-metric score.",
+        "benefit": "Fast first-round filtering where every rejection can be justified metric by metric."
+      },
+      {
+        "use_case": "Plagiarism and LLM-copy triage for instructors",
+        "example": "Two submissions reach a similarity of 0.93 against the 0.85 threshold, so the agent raises a flag in the report. The instructor reviews only those pairs instead of all 300.",
+        "benefit": "Saves review time by narrowing manual checking to suspicious cases."
+      },
+      {
+        "use_case": "Continuous feedback in large-enrollment university CS labs",
+        "example": "400 students submitting weekly lab assignments get instant, reproducible feedback at 2 AM without waiting days for TA grading.",
+        "benefit": "Accelerates student learning cycle and unburdens teaching assistants."
+      },
+      {
+        "use_case": "CI/CD regression gating for mission-critical C software",
+        "example": "Pull requests must achieve 100/100 across correctness, sanitizers, and complexity bounds before merging into embedded systems firmware.",
+        "benefit": "Intercepts memory leaks and algorithmic latency regressions before production deployment."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Tests cannot prove correctness",
+        "example": "A submission passes all 10 hidden tests but fails when the input has extra whitespace or a trailing newline that no test covers. The agent still reports 10/10.",
+        "mitigation": "The agent should create its own extra tricky test inputs and compare the student's answers with the answers of a correct program."
+      },
+      {
+        "limitation": "Wall-clock timing curves are noisy on shared or virtualized machines",
+        "example": "A student's O(1) submission runs in 2ms on one execution, but during background OS scheduling spikes to 28ms, distorting empirical complexity estimation.",
+        "mitigation": "Normalize timings against a simultaneous baseline kernel or measure hardware instruction counts / CPU cycles instead of raw wall-clock time."
+      },
+      {
+        "limitation": "Surface similarity can be deceived by structural refactoring and obfuscation",
+        "example": "A student copies code from a peer but reorders independent statements, inserts dead variables, or wraps expressions in macros, dropping lexical n-gram similarity below 0.85.",
+        "mitigation": "Synthesize control-flow graphs (CFG) and compare normalized intermediate representations (LLVM IR / AST) rather than token text."
+      },
+      {
+        "limitation": "Compiler optimizations may mask undefined behavior or dead loops",
+        "example": "An uninitialized variable or dead infinite loop is eliminated by GCC at -O2 optimization level, allowing a flawed submission to pass smoke tests.",
+        "mitigation": "Compile and test across multiple optimization tiers (-O0, -O2, -Og) with ASan/UBSan instrumentation."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

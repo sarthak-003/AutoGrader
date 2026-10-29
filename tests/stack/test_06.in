@@ -1,0 +1,4 @@
+PUSH 42
+PEEK
+POP
+EXIT

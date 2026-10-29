@@ -1,0 +1,57 @@
+{
+  "problem": "palindrome_checker",
+  "time_limit_s": 1,
+  "memory_limit_mb": 64,
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "weight": 0.25,
+      "params": { "testset_dir": "tests/palindrome/" }
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "weight": 0.10,
+      "params": { "flags": "-Wall -Wextra -Werror -std=c11" }
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "weight": 0.10,
+      "params": { "max_cyclomatic": 6, "max_function_length": 35 }
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "weight": 0.15,
+      "params": { "expect_helpers": true, "min_functions": 2 }
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "weight": 0.15,
+      "params": {
+        "custom_cases": [
+          { "input": "a\n", "expected": "YES", "label": "single character palindrome" },
+          { "input": "noon\n", "expected": "YES", "label": "even length palindrome" },
+          { "input": "step on no pets\n", "expected": "YES", "label": "phrase with spaces" },
+          { "input": "xyz\n", "expected": "NO", "label": "standard non-palindrome" }
+        ]
+      }
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "weight": 0.10,
+      "params": { "required": "O(N)", "input_type": "string", "sizes": [10, 100, 1000] }
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "weight": 0.15,
+      "params": { "flags": "-fsanitize=address,undefined" }
+    }
+  ]
+}
+

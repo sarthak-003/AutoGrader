@@ -1,0 +1,5 @@
+PUSH 7
+POP
+PUSH 8
+POP
+EXIT

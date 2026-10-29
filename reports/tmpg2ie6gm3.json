@@ -1,0 +1,324 @@
+{
+  "submission": "tmpg2ie6gm3.c",
+  "rules_hash": "sha256:cd1d95fb81670ea8b6d0766c0e4243cbe9f29fe2e4d400c77ab9dd636e78067b",
+  "grade": 60.0,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 0.0,
+      "weight": 0.25,
+      "contribution": 0.0,
+      "evidence": {
+        "tests_passed": 0,
+        "tests_total": 10,
+        "failing": [
+          {
+            "test_name": "test_01",
+            "input": "4\n2 7 11 15\n9",
+            "expected": "0 1",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_02",
+            "input": "3\n2 3 4\n6",
+            "expected": "0 2",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_03",
+            "input": "2\n-3 3\n0",
+            "expected": "0 1",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_04",
+            "input": "5\n1 2 3 4 5\n100",
+            "expected": "-1",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_05",
+            "input": "2\n3 3\n6",
+            "expected": "0 1",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_06",
+            "input": "6\n-10 -5 0 3 7 12\n-3",
+            "expected": "0 4",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_07",
+            "input": "4\n1 5 9 13\n14",
+            "expected": "0 3",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_08",
+            "input": "5\n10 20 30 40 50\n70",
+            "expected": "2 3",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_09",
+            "input": "1\n5\n5",
+            "expected": "-1",
+            "got": "true",
+            "note": "Wrong Answer"
+          },
+          {
+            "test_name": "test_10",
+            "input": "6\n-50 -20 0 10 30 90\n40",
+            "expected": "3 4",
+            "got": "true",
+            "note": "Wrong Answer"
+          }
+        ]
+      },
+      "feedback": "0/10 tests pass. Fails on INT_MAX + 1: signed overflow.",
+      "suggestions": [
+        "Output mismatch: got 'true', expected '0 1'."
+      ]
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "required_complexity": "O(N)",
+        "detected_loops": 3,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 94.687
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 95.532
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 87.15
+          }
+        ],
+        "asymptotic_match": true
+      },
+      "feedback": "O(N) confirmed",
+      "suggestions": []
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.8,
+      "weight": 0.1,
+      "contribution": 8.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 4,
+        "max_function_length": 44,
+        "total_loc": 44,
+        "functions": [
+          {
+            "name": "compare",
+            "cyclomatic_complexity": 1,
+            "length": 5,
+            "nloc": 3
+          },
+          {
+            "name": "binarySearch",
+            "cyclomatic_complexity": 4,
+            "length": 27,
+            "nloc": 13
+          },
+          {
+            "name": "twoSum",
+            "cyclomatic_complexity": 3,
+            "length": 31,
+            "nloc": 10
+          },
+          {
+            "name": "main",
+            "cyclomatic_complexity": 2,
+            "length": 23,
+            "nloc": 10
+          }
+        ]
+      },
+      "feedback": "function length 44 > 40",
+      "suggestions": []
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "functions_defined": 2,
+        "expected_min": 2,
+        "function_names": [
+          "compare",
+          "main"
+        ]
+      },
+      "feedback": "2 functions defined (modular helper architecture verified)",
+      "suggestions": []
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 0.0,
+      "weight": 0.1,
+      "contribution": 0.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 3,
+        "failures": [
+          {
+            "case": "target not present in array",
+            "input": "5\n1 2 3 4 5\n100",
+            "expected": "-1",
+            "got": "true",
+            "note": "Incorrect result for target not present in array"
+          },
+          {
+            "case": "negative values summing to zero",
+            "input": "2\n-3 3\n0",
+            "expected": "0 1",
+            "got": "true",
+            "note": "Incorrect result for negative values summing to zero"
+          },
+          {
+            "case": "array of length 1 (requires two numbers)",
+            "input": "1\n5\n5",
+            "expected": "-1",
+            "got": "true",
+            "note": "Incorrect result for array of length 1 (requires two numbers)"
+          }
+        ],
+        "overflow_handled": true
+      },
+      "feedback": "Failed 3 edge cases: target not present in array",
+      "suggestions": [
+        "Review boundary handling for: target not present in array"
+      ]
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "score": 0.7,
+      "weight": 0.1,
+      "contribution": 7.0,
+      "evidence": {
+        "model": "llama-3.3-70b-versatile",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\": 7, \"reasons\": [\"Single-letter names\", \"missing whitespace\"]}",
+        "terse_variables_detected": [
+          "n",
+          "i",
+          "n"
+        ],
+        "comments_present": true
+      },
+      "feedback": "Single-letter names, missing whitespace.",
+      "suggestions": [
+        "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+        "Add spaces around arithmetic operators and blank lines between logical sections."
+      ]
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Output mismatch: got 'true', expected '0 1'.",
+    "Review boundary handling for: target not present in array",
+    "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+    "Add spaces around arithmetic operators and blank lines between logical sections."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Coding-interview and hiring screens",
+        "example": "A company runs 500 candidate submissions for an 'add two integers safely' task. The agent ranks them by correctness, edge-case handling and memory safety, and gives an explainable per-metric score.",
+        "benefit": "Fast first-round filtering where every rejection can be justified metric by metric."
+      },
+      {
+        "use_case": "Plagiarism and LLM-copy triage for instructors",
+        "example": "Two submissions reach a similarity of 0.93 against the 0.85 threshold, so the agent raises a flag in the report. The instructor reviews only those pairs instead of all 300.",
+        "benefit": "Saves review time by narrowing manual checking to suspicious cases."
+      },
+      {
+        "use_case": "Continuous feedback in large-enrollment university CS labs",
+        "example": "400 students submitting weekly lab assignments get instant, reproducible feedback at 2 AM without waiting days for TA grading.",
+        "benefit": "Accelerates student learning cycle and unburdens teaching assistants."
+      },
+      {
+        "use_case": "CI/CD regression gating for mission-critical C software",
+        "example": "Pull requests must achieve 100/100 across correctness, sanitizers, and complexity bounds before merging into embedded systems firmware.",
+        "benefit": "Intercepts memory leaks and algorithmic latency regressions before production deployment."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Tests cannot prove correctness",
+        "example": "A submission passes all 10 hidden tests but fails when the input has extra whitespace or a trailing newline that no test covers. The agent still reports 10/10.",
+        "mitigation": "The agent should create its own extra tricky test inputs and compare the student's answers with the answers of a correct program."
+      },
+      {
+        "limitation": "Wall-clock timing curves are noisy on shared or virtualized machines",
+        "example": "A student's O(1) submission runs in 2ms on one execution, but during background OS scheduling spikes to 28ms, distorting empirical complexity estimation.",
+        "mitigation": "Normalize timings against a simultaneous baseline kernel or measure hardware instruction counts / CPU cycles instead of raw wall-clock time."
+      },
+      {
+        "limitation": "Surface similarity can be deceived by structural refactoring and obfuscation",
+        "example": "A student copies code from a peer but reorders independent statements, inserts dead variables, or wraps expressions in macros, dropping lexical n-gram similarity below 0.85.",
+        "mitigation": "Synthesize control-flow graphs (CFG) and compare normalized intermediate representations (LLVM IR / AST) rather than token text."
+      },
+      {
+        "limitation": "Compiler optimizations may mask undefined behavior or dead loops",
+        "example": "An uninitialized variable or dead infinite loop is eliminated by GCC at -O2 optimization level, allowing a flawed submission to pass smoke tests.",
+        "mitigation": "Compile and test across multiple optimization tiers (-O0, -O2, -Og) with ASan/UBSan instrumentation."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "submission": "palindrome_buggy.c",
+  "problem": "palindrome_checker",
+  "rules_hash": "sha256:efc562636cc0796d3267631cd9226cbf6428a711920773d8917362d3cb594552",
+  "grade": 80.3,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "tests_passed": 10,
+        "tests_total": 10,
+        "failing": []
+      },
+      "feedback": "All 10 tests pass cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.6,
+      "weight": 0.1,
+      "contribution": 6.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 7,
+        "max_function_length": 29,
+        "total_loc": 27,
+        "functions": [
+          {
+            "name": "main",
+            "cyclomatic_complexity": 7,
+            "length": 29,
+            "nloc": 21
+          }
+        ]
+      },
+      "feedback": "single-block code, cyclomatic complexity 7 > 6",
+      "suggestions": [
+        "Break logic into distinct visual sections and functions rather than a single monolithic block.",
+        "Reduce branching complexity (current cyclomatic complexity is 7)."
+      ]
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 0.3,
+      "weight": 0.15,
+      "contribution": 4.5,
+      "evidence": {
+        "functions_defined": 1,
+        "expected_min": 2,
+        "function_names": [
+          "main"
+        ]
+      },
+      "feedback": "only main(); no helper",
+      "suggestions": [
+        "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main."
+      ]
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 4,
+        "failures": [],
+        "overflow_handled": true
+      },
+      "feedback": "All boundary edge cases (zeros, negatives, extreme values) passed cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "required_complexity": "O(N)",
+        "detected_loops": 1,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 411.735
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 393.03
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 370.914
+          }
+        ],
+        "asymptotic_match": true
+      },
+      "feedback": "O(N) confirmed",
+      "suggestions": []
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "score": 0.65,
+      "weight": 0.15,
+      "contribution": 9.8,
+      "evidence": {
+        "sanitizer_flags": "-fsanitize=address,undefined",
+        "diagnostics": [
+          "Potential memory leak: 1 allocation call(s) but only 0 free() call(s)."
+        ],
+        "allocations": 1,
+        "deallocations": 0
+      },
+      "feedback": "Potential memory leak: 1 allocation call(s) but only 0 free() call(s).",
+      "suggestions": [
+        "Ensure every dynamically allocated block (malloc/calloc) is freed with free().",
+        "Run with -fsanitize=address to intercept memory errors during debugging."
+      ]
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Break logic into distinct visual sections and functions rather than a single monolithic block.",
+    "Reduce branching complexity (current cyclomatic complexity is 7).",
+    "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.",
+    "Ensure every dynamically allocated block (malloc/calloc) is freed with free().",
+    "Run with -fsanitize=address to intercept memory errors during debugging."
+  ],
+  "deductions": [
+    "[STRUCTURE] -4.0 pts: Structural deficiencies: single-block code, cyclomatic complexity 7 > 6.",
+    "[MODULARITY] -10.5 pts: Only main() defined; expected at least 2 functions (core logic should be in a helper function).",
+    "[MEMORY_SAFETY] -5.2 pts: Memory safety violation: Potential memory leak: 1 allocation call(s) but only 0 free() call(s).."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Bioinformatics & DNA Sequence Analysis",
+        "example": "Verifies algorithms checking reverse-complement genetic palindromes and restriction enzyme recognition sites.",
+        "benefit": "Enforces linear O(N) sequence parsing with zero memory overhead."
+      },
+      {
+        "use_case": "String Processing & Buffer Sanitization Screening",
+        "example": "Tests handling of punctuation, multi-word phrases with spaces ('step on no pets'), and odd vs even length palindromes.",
+        "benefit": "Validates boundary string safety and prevents buffer overruns."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "ASCII Assumptions on Multi-Byte UTF-8 Runes",
+        "example": "A submission passing all ASCII tests fails when given multi-byte UTF-8 accented characters like '\u00e9' or non-Latin scripts.",
+        "mitigation": "Incorporate wide-character wchar_t / UTF-8 multi-byte test suites into language rules."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

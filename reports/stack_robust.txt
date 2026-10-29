@@ -1,0 +1,39 @@
+===== Grading report for stack_robust.c =====
+Problem: dynamic_stack
+Overall grade: 96.0 / 100
+Metric         Weight Score  Contribution Verdict
+correctness    25     25/25  25.0         All 8 tests pass cleanly.
+memory_safety  25     25/25  25.0         no diagnostics
+modularity     15     15/15  15.0         6 functions defined (modular helper architecture verified)
+syntax         10     10/10  10.0         Clean compilation with zero warnings.
+structure      10     6/10   6.0          cyclomatic complexity 9 > 8, function length 92 > 50
+logical        15     15/15  15.0         All boundary edge cases (zeros, negatives, extreme values) passed cleanly.
+
+--- Why Your Grade Decreased (Deduction Analysis) ---
+- [STRUCTURE] -4.0 pts: Structural deficiencies: cyclomatic complexity 9 > 8, function length 92 > 50.
+
+--- Suggestions to raise the grade ---
+- Reduce branching complexity (current cyclomatic complexity is 9).
+
+—-- Usefulness & limitations for dynamic_stack —--
+Useful for:
+1. Systems Programming & Embedded OS Kernel Call Stacks
+Example: In mission-critical firmware, dynamic stack structures must strictly free every popped node to prevent kernel heap exhaustion.
+Benefit: Intercepts memory leaks and pointer corruption before software is flashed to hardware.
+
+2. Automated Pointer Safety & Stack Underflow Triage
+Example: When an empty stack receives POP or PEEK, the agent ensures the program safely outputs 'UNDERFLOW' without null pointer dereference crashes.
+Benefit: Eliminates segmentation faults (0xC0000005) in student lab submissions.
+
+3. Modular Object-Oriented Architecture Verification in C
+Example: Enforces separation of concerns across push(), pop(), and free_stack() helper functions rather than monolithic main() implementations.
+Benefit: Instills industrial software design patterns in undergraduate engineers.
+
+Limits of this report (dynamic_stack):
+1. Short-Lived Execution Masking Heap Fragmentation
+Example: A student's stack program exits after 10 operations without triggering OS heap fragmentation that only manifests after millions of allocations.
+Mitigation: Execute fuzzing stress tests with 100,000+ random interleaved push/pop operations under ASan instrumentation.
+
+2. Compiler Inlining of Small Allocators
+Example: GCC at -O3 may inline small node structs or optimize them into stack frames, potentially bypassing certain static heap checks.
+Mitigation: Evaluate submissions under both -O0 (raw pointer inspection) and -O2 (optimized safety).

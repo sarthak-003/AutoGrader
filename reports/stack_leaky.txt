@@ -1,0 +1,44 @@
+===== Grading report for stack_leaky.c =====
+Problem: dynamic_stack
+Overall grade: 78.7 / 100
+Metric         Weight Score  Contribution Verdict
+correctness    25     25/25  25.0         All 8 tests pass cleanly.
+memory_safety  25     16/25  16.2         Potential memory leak: 1 allocation call(s) but only 0 free() call(s).
+modularity     15     4/15   4.5          only main(); no helper
+syntax         10     10/10  10.0         Clean compilation with zero warnings.
+structure      10     8/10   8.0          single-block code
+logical        15     15/15  15.0         All boundary edge cases (zeros, negatives, extreme values) passed cleanly.
+
+--- Why Your Grade Decreased (Deduction Analysis) ---
+- [MEMORY_SAFETY] -8.8 pts: Memory safety violation: Potential memory leak: 1 allocation call(s) but only 0 free() call(s)..
+- [MODULARITY] -10.5 pts: Only main() defined; expected at least 3 functions (core logic should be in a helper function).
+- [STRUCTURE] -2.0 pts: Structural deficiencies: single-block code.
+
+--- Suggestions to raise the grade ---
+- Ensure every dynamically allocated block (malloc/calloc) is freed with free().
+- Run with -fsanitize=address to intercept memory errors during debugging.
+- Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.
+- Break logic into distinct visual sections and functions rather than a single monolithic block.
+
+—-- Usefulness & limitations for dynamic_stack —--
+Useful for:
+1. Systems Programming & Embedded OS Kernel Call Stacks
+Example: In mission-critical firmware, dynamic stack structures must strictly free every popped node to prevent kernel heap exhaustion.
+Benefit: Intercepts memory leaks and pointer corruption before software is flashed to hardware.
+
+2. Automated Pointer Safety & Stack Underflow Triage
+Example: When an empty stack receives POP or PEEK, the agent ensures the program safely outputs 'UNDERFLOW' without null pointer dereference crashes.
+Benefit: Eliminates segmentation faults (0xC0000005) in student lab submissions.
+
+3. Modular Object-Oriented Architecture Verification in C
+Example: Enforces separation of concerns across push(), pop(), and free_stack() helper functions rather than monolithic main() implementations.
+Benefit: Instills industrial software design patterns in undergraduate engineers.
+
+Limits of this report (dynamic_stack):
+1. Short-Lived Execution Masking Heap Fragmentation
+Example: A student's stack program exits after 10 operations without triggering OS heap fragmentation that only manifests after millions of allocations.
+Mitigation: Execute fuzzing stress tests with 100,000+ random interleaved push/pop operations under ASan instrumentation.
+
+2. Compiler Inlining of Small Allocators
+Example: GCC at -O3 may inline small node structs or optimize them into stack frames, potentially bypassing certain static heap checks.
+Mitigation: Evaluate submissions under both -O0 (raw pointer inspection) and -O2 (optimized safety).

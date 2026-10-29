@@ -1,0 +1,223 @@
+{
+  "submission": "two_sum_quadratic.c",
+  "problem": "two_sum_sorted",
+  "rules_hash": "sha256:cd1d95fb81670ea8b6d0766c0e4243cbe9f29fe2e4d400c77ab9dd636e78067b",
+  "grade": 68.5,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": true,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 0.9,
+      "weight": 0.25,
+      "contribution": 22.5,
+      "evidence": {
+        "tests_passed": 9,
+        "tests_total": 10,
+        "failing": [
+          {
+            "test_name": "test_04",
+            "input": "5\n1 2 3 4 5\n100",
+            "expected": "-1",
+            "got": "-1",
+            "note": "Time Limit Exceeded"
+          }
+        ]
+      },
+      "feedback": "9/10 tests pass. Fails on INT_MAX + 1: signed overflow.",
+      "suggestions": [
+        "Output mismatch: got '-1', expected '-1'."
+      ]
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 0.4,
+      "weight": 0.25,
+      "contribution": 10.0,
+      "evidence": {
+        "required_complexity": "O(N)",
+        "detected_loops": 3,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 377.596
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 536.213
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 280.087
+          }
+        ],
+        "asymptotic_match": false
+      },
+      "feedback": "Detected nested loops yielding O(N^2), strictly violating O(N) requirement.",
+      "suggestions": [
+        "Optimize algorithmic structure to achieve required O(N) bound."
+      ]
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.6,
+      "weight": 0.1,
+      "contribution": 6.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 9,
+        "max_function_length": 25,
+        "total_loc": 25,
+        "functions": [
+          {
+            "name": "main",
+            "cyclomatic_complexity": 9,
+            "length": 25,
+            "nloc": 22
+          }
+        ]
+      },
+      "feedback": "single-block code, cyclomatic complexity 9 > 8",
+      "suggestions": [
+        "Break logic into distinct visual sections and functions rather than a single monolithic block.",
+        "Reduce branching complexity (current cyclomatic complexity is 9)."
+      ]
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 0.3,
+      "weight": 0.1,
+      "contribution": 3.0,
+      "evidence": {
+        "functions_defined": 1,
+        "expected_min": 2,
+        "function_names": [
+          "main"
+        ]
+      },
+      "feedback": "only main(); no helper",
+      "suggestions": [
+        "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main."
+      ]
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 3,
+        "failures": [],
+        "overflow_handled": true
+      },
+      "feedback": "All boundary edge cases (zeros, negatives, extreme values) passed cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "score": 0.7,
+      "weight": 0.1,
+      "contribution": 7.0,
+      "evidence": {
+        "model": "llama-3.3-70b-versatile",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\": 7, \"reasons\": [\"Single-letter names\", \"missing whitespace\"]}",
+        "terse_variables_detected": [
+          "i",
+          "t",
+          "f",
+          "i",
+          "j"
+        ],
+        "comments_present": true
+      },
+      "feedback": "Single-letter names, missing whitespace.",
+      "suggestions": [
+        "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+        "Add spaces around arithmetic operators and blank lines between logical sections."
+      ]
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Output mismatch: got '-1', expected '-1'.",
+    "Optimize algorithmic structure to achieve required O(N) bound.",
+    "Break logic into distinct visual sections and functions rather than a single monolithic block.",
+    "Reduce branching complexity (current cyclomatic complexity is 9).",
+    "Extract core logic into a helper function (e.g. int add(int a, int b)) and call it from main.",
+    "Rename terse identifiers (e.g. a,b to lhs,rhs or num1,num2).",
+    "Add spaces around arithmetic operators and blank lines between logical sections."
+  ],
+  "deductions": [
+    "[CORRECTNESS] -2.5 pts: Failed 1 of 10 test cases: 9/10 tests pass. Fails on INT_MAX + 1: signed overflow..",
+    "[COMPLEXITY] -15.0 pts: Algorithmic complexity penalty: Detected nested loops yielding O(N^2), strictly violating O(N) requirement..",
+    "[STRUCTURE] -4.0 pts: Structural deficiencies: single-block code, cyclomatic complexity 9 > 8.",
+    "[MODULARITY] -7.0 pts: Only main() defined; expected at least 2 functions (core logic should be in a helper function).",
+    "[READABILITY] -3.0 pts: Readability/style deficiencies: Single-letter names, missing whitespace.."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Algorithmic Efficiency Screening in Quantitative & Tech Interviews",
+        "example": "Evaluates whether candidates discover the O(N) two-pointer technique on sorted arrays versus naive O(N^2) brute-force nested loops across 10,000+ elements.",
+        "benefit": "Automates algorithmic performance gating without subjective manual code reviews."
+      },
+      {
+        "use_case": "Special Judge Multi-Solution Verification",
+        "example": "When an array contains multiple valid index pairs (e.g. arr[1]+arr[4]=70 and arr[2]+arr[3]=70), the agent accepts any mathematically valid pair.",
+        "benefit": "Eliminates false negatives common in rigid exact-match string diff graders."
+      },
+      {
+        "use_case": "Memory Bounds & Linear Array Traversal Gating",
+        "example": "Verifies that array indexing does not produce off-by-one errors or out-of-bounds access on negative target numbers.",
+        "benefit": "Guarantees runtime index safety prior to production algorithm deployment."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Multi-solution Non-determinism with Rigid Checkers",
+        "example": "If a student outputs a different valid index pair than the single reference output, strict line-by-line diffs fail unless a Special Judge is active.",
+        "mitigation": "AutoGrader includes an integrated two_sum validator that verifies arr[i] + arr[j] == target dynamically."
+      },
+      {
+        "limitation": "CPU L1/L2 Cache Locality Skewing Timing Curves",
+        "example": "An O(N) linear scan on a small array fits entirely in CPU cache, showing sub-microsecond runtimes that distort empirical curve fitting.",
+        "mitigation": "Profile hardware instruction retirement counts and CPU cycles rather than raw wall-clock duration."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "submission": "binary_search_optimal.c",
+  "problem": "binary_search",
+  "rules_hash": "sha256:e59e86cb5dad00888f79cf32a9b50636a8b8cd3157b3c3a23a58f4a8794b1fe3",
+  "grade": 96.0,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": false,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "tests_passed": 10,
+        "tests_total": 10,
+        "failing": []
+      },
+      "feedback": "All 10 tests pass cleanly.",
+      "suggestions": []
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 1.0,
+      "weight": 0.25,
+      "contribution": 25.0,
+      "evidence": {
+        "required_complexity": "O(log N)",
+        "detected_loops": 2,
+        "timing_curve": [
+          {
+            "size": 10,
+            "avg_duration_ms": 186.905
+          },
+          {
+            "size": 100,
+            "avg_duration_ms": 267.11
+          },
+          {
+            "size": 1000,
+            "avg_duration_ms": 203.842
+          }
+        ],
+        "asymptotic_match": true
+      },
+      "feedback": "O(log N) divide-and-conquer confirmed (bisection pattern detected)",
+      "suggestions": []
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "functions_defined": 2,
+        "expected_min": 2,
+        "function_names": [
+          "binary_search",
+          "main"
+        ]
+      },
+      "feedback": "2 functions defined (modular helper architecture verified)",
+      "suggestions": []
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": [],
+        "flags_used": "-O2 -Wall -Wextra  -std=c11 -D__USE_MINGW_ANSI_STDIO=1"
+      },
+      "feedback": "Clean compilation with zero warnings.",
+      "suggestions": []
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.6,
+      "weight": 0.1,
+      "contribution": 6.0,
+      "evidence": {
+        "has_headers": true,
+        "max_cyclomatic": 7,
+        "max_function_length": 53,
+        "total_loc": 53,
+        "functions": [
+          {
+            "name": "binary_search",
+            "cyclomatic_complexity": 6,
+            "length": 22,
+            "nloc": 18
+          },
+          {
+            "name": "main",
+            "cyclomatic_complexity": 7,
+            "length": 29,
+            "nloc": 24
+          }
+        ]
+      },
+      "feedback": "cyclomatic complexity 7 > 6, function length 53 > 35",
+      "suggestions": [
+        "Reduce branching complexity (current cyclomatic complexity is 7)."
+      ]
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 1.0,
+      "weight": 0.15,
+      "contribution": 15.0,
+      "evidence": {
+        "cases_evaluated": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "total_probes": 4,
+        "failures": [],
+        "overflow_handled": true
+      },
+      "feedback": "All boundary edge cases (zeros, negatives, extreme values) passed cleanly.",
+      "suggestions": []
+    }
+  ],
+  "flags": [],
+  "suggestions": [
+    "Reduce branching complexity (current cyclomatic complexity is 7)."
+  ],
+  "deductions": [
+    "[STRUCTURE] -4.0 pts: Structural deficiencies: cyclomatic complexity 7 > 6, function length 53 > 35."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Logarithmic Algorithmic Gating (O(log N) Enforcement)",
+        "example": "Verifies that students execute true divide-and-conquer binary search rather than passing with linear O(N) scans on sorted arrays.",
+        "benefit": "Docks points on candidates who submit naive loops for logarithmic search questions."
+      },
+      {
+        "use_case": "Integer Midpoint Overflow Bug Detection",
+        "example": "Catches the infamous (low + high) / 2 signed overflow bug when searching arrays with large indices, enforcing low + (high - low) / 2.",
+        "benefit": "Teaches robust numerical boundary handling in core algorithms."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Small Array Size Anomaly",
+        "example": "On very small arrays (N < 16), linear search can run faster than binary search due to branch prediction and CPU prefetching.",
+        "mitigation": "Run complexity timing benchmarks on array sizes N >= 1,000 to isolate asymptotic scaling."
+      }
+    ]
+  },
+  "tool_versions": {
+    "gcc": "6.3.0",
+    "cppcheck": "2.14.1",
+    "lizard": "1.17.10"
+  }
+}

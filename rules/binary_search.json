@@ -1,0 +1,50 @@
+{
+  "problem": "binary_search",
+  "time_limit_s": 2,
+  "memory_limit_mb": 64,
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "weight": 0.25,
+      "params": { "testset_dir": "tests/binary_search/" }
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "weight": 0.25,
+      "params": { "required": "O(log N)", "input_type": "array", "sizes": [10, 100, 1000] }
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "weight": 0.15,
+      "params": { "expect_helpers": true, "min_functions": 2 }
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "weight": 0.10,
+      "params": { "flags": "-Wall -Wextra -Werror -std=c11" }
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "weight": 0.10,
+      "params": { "max_cyclomatic": 6, "max_function_length": 35 }
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "weight": 0.15,
+      "params": {
+        "custom_cases": [
+          { "input": "5\n10 20 30 40 50\n10\n", "expected": "0", "label": "target at first index (boundary)" },
+          { "input": "5\n10 20 30 40 50\n50\n", "expected": "4", "label": "target at last index (boundary)" },
+          { "input": "5\n10 20 30 40 50\n99\n", "expected": "-1", "label": "target strictly greater than all elements" },
+          { "input": "1\n42\n42\n", "expected": "0", "label": "single element array found" }
+        ]
+      }
+    }
+  ]
+}

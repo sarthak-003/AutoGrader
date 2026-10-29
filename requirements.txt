@@ -1,0 +1,7 @@
+# AutoGrader Core Dependencies
+flask>=3.0.0
+lizard>=1.17.10
+psutil>=5.9.8
+reportlab>=4.0.0
+pytest>=7.0.0
+
